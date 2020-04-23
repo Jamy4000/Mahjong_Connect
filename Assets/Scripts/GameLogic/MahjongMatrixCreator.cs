@@ -52,7 +52,12 @@ public class MahjongMatrixCreator : MonoBehaviour
         var lines = txt.text.Split("\n"[0]);
 
         // Create the first row of the matrix + 2 for the 2 empty rows surrounding the matrix 
-        TilesMatrix = new Tile[GameManager.CurrentLevel.Height + 2][];
+        TilesMatrix = new Tile[GameManager.CurrentLevel.Length + 2][];
+
+        for (int x = 0; x < GameManager.CurrentLevel.Length + 2; x++)
+        {
+            TilesMatrix[x] = new Tile[GameManager.CurrentLevel.Height + 2];
+        }
 
         // Check that we have the same length as number of lines
         if (lines.Length != GameManager.CurrentLevel.Height) 
@@ -63,25 +68,14 @@ public class MahjongMatrixCreator : MonoBehaviour
 
         Dictionary<int, int> usedTiles = new Dictionary<int, int>();
 
-        // Create first and last empty lines
-        TilesMatrix[0] = new Tile[GameManager.CurrentLevel.Length + 2];
-        TilesMatrix[GameManager.CurrentLevel.Height + 1] = new Tile[GameManager.CurrentLevel.Length + 2];
-
         for (int i = 0; i < GameManager.CurrentLevel.Height; i++)
         {
-            // + 2 for the 2 empty column surrounding the matrix
-            TilesMatrix[i + 1] = new Tile[GameManager.CurrentLevel.Length + 2];
-
-            // Create the two empty tiles on top and bottom 
-            TilesMatrix[i + 1][0] = null;
-            TilesMatrix[i + 1][GameManager.CurrentLevel.Length + 1] = null;
-
-            for (int j = 0; j < GameManager.CurrentLevel.Length; j++)
+            for (int j = 0; j < GameManager.CurrentLevel.Length ; j++)
             {
                 // No tile here
                 if (lines[i][j] == '0') 
                 {
-                    TilesMatrix[i + 1][j + 1] = null;
+                    TilesMatrix[j + 1][i + 1] = null;
                 }
                 else
                 {
@@ -93,19 +87,14 @@ public class MahjongMatrixCreator : MonoBehaviour
                         randomIndex = UnityEngine.Random.Range(0, _tilesToPresent.Length);
                     }
 
-                    //Debug.Log("TilesMatrix.Length " + TilesMatrix.Length);
-                    //Debug.Log("TilesMatrix[i].Length " + TilesMatrix[i].Length);
-                    //Debug.Log("i + 1 " + (i + 1));
-                    //Debug.Log("j + 1 " + (j + 1));
-
-                    TilesMatrix[i + 1][j + 1] = _tilesToPresent[randomIndex];
-                    CheckUsedTiles(randomIndex, i);
+                    TilesMatrix[j + 1][i + 1] = _tilesToPresent[randomIndex];
+                    CheckUsedTiles(randomIndex);
                 }
             }
         }
 
 
-        void CheckUsedTiles(int randomIndex, int i)
+        void CheckUsedTiles(int randomIndex)
         {
             // The tile was already chosen 
             if (usedTiles.ContainsKey(randomIndex))

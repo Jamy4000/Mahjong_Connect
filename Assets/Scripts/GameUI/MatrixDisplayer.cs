@@ -15,11 +15,11 @@ public class MatrixDisplayer : MonoBehaviour
 
     private void DisplayMatrix()
     {
-        for (int i = 1; i < GameManager.CurrentLevel.Height + 1; i++)
+        for (int i = 0; i < GameManager.CurrentLevel.Length + 2; i++)
         {
             var verticalLayout = Instantiate(_verticalLayoutPrefab, transform).transform;
 
-            for (int j = 1; j < GameManager.CurrentLevel.Length + 1; j++)
+            for (int j = 0; j < GameManager.CurrentLevel.Height + 2; j++)
             {
                 // If empty tile, we don't display anything
                 if (_matrixCreator.TilesMatrix[i][j] == null) 
