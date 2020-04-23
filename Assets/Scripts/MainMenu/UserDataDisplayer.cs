@@ -10,8 +10,7 @@ public class UserDataDisplayer : MonoBehaviour
 
     private LevelLoader _levelLoader;
 
-    private const string USER_SCORE_KEY = "UserScore";
-    private const string USER_LEVEL_DONE = "UserLevelDone";
+    private const string USER_LEVEL_SCORE = "UserLevelScore";
 
     private void Awake()
     {
@@ -20,36 +19,36 @@ public class UserDataDisplayer : MonoBehaviour
 
     private void Start()
     {
-        SetUserValues();
+        GetUserScore();
     }
 
-    private void SetUserValues() 
+    /// <summary>
+    /// TODO Seperate this in two methods, in two different classes
+    /// </summary>
+    private void GetUserScore() 
     {
-        if (PlayerPrefs.HasKey(USER_SCORE_KEY))
-        {
-            _userScore.text = PlayerPrefs.GetInt(USER_SCORE_KEY).ToString();
-        }
-        else 
-        {
-            PlayerPrefs.SetInt(USER_SCORE_KEY, 0);
-            _userScore.text = "0";
-        }
+        int mainScore = 0;
 
-        for (int i = 0; i < _stars.Length; i++) 
+        for (int i = 0; i < _stars.Length; i++)
         {
-            if (PlayerPrefs.HasKey(USER_LEVEL_DONE + i)) 
+            var level = _levelLoader.GetLevel(i);
+
+            if (PlayerPrefs.HasKey(USER_LEVEL_SCORE + i)) 
             {
-                var level = _levelLoader.GetLevel(i);
-                level.IsDone = PlayerPrefs.GetInt(USER_LEVEL_DONE + i) == 1;
+                level.Score = PlayerPrefs.GetInt(USER_LEVEL_SCORE + i);
+                level.IsDone = level.Score > 0;
                 _stars[i].color = level.IsDone ? Color.white : Color.black;
-               
+                mainScore += level.Score;
             }
             else
             {
-                _levelLoader.GetLevel(i).IsDone = false;
-                PlayerPrefs.SetInt(USER_LEVEL_DONE + i, 0);
+                level.IsDone = false;
+                level.Score = 0;
+                PlayerPrefs.SetInt(USER_LEVEL_SCORE + i, 0);
                 _stars[i].color = Color.black;
             }
         }
+
+        _userScore.text = mainScore.ToString();
     }
 }

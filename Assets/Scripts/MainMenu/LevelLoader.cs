@@ -9,7 +9,7 @@ public class LevelLoader : MonoBehaviour
     /// <summary>
     /// Method called by the MainMenu buttons to set the level to load and load the game scene
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="index"></param>
     public void LoadLevel(int index) 
     {
         foreach (var level in _levels) 
