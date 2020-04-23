@@ -1,9 +1,14 @@
-﻿public class Tile
+﻿using UnityEngine;
+
+public class Tile
 {
     public UnityEngine.Sprite Icon;
     public string ID;
 
     public bool IsSelected = false;
+    public UnityEngine.Vector2 Coordinates;
+
+    public GameObject GameObjectRepresentation;
 
     public Tile(string iconName, UnityEngine.Sprite icon) 
     {

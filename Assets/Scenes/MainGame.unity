@@ -285,7 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19386f4a38df3ae4cba63f9aa7889b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _matrixCreator: {fileID: 675637765}
   _verticalLayoutPrefab: {fileID: 5463429311320104175, guid: 36ac6750849a23744aef15bd3296d025,
     type: 3}
   _tilePrefab: {fileID: 3226946537323475893, guid: c1d0d6972fcb5da40a304a7830f0499b,
@@ -585,6 +584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25a7a8e033e0ba3468564d3e5fe31b40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _matrixDisplayer: {fileID: 409991092}
 --- !u!114 &675637766
 MonoBehaviour:
   m_ObjectHideFlags: 0

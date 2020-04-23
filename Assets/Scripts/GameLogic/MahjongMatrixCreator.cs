@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 public class MahjongMatrixCreator : MonoBehaviour
 {
-    public Tile[][] TilesMatrix;
-
+    [SerializeField] private MatrixDisplayer _matrixDisplayer;
     private Tile[] _tilesToPresent;
+    private GameManager _gameManager;
 
-    private void Awake()
+    private void Start()
     {
+        _gameManager = GameManager.Instance;
         CreateTiles();
         GetCurrentLayout();
     }
@@ -24,10 +24,10 @@ public class MahjongMatrixCreator : MonoBehaviour
 
         for (int i = 0; i < _tilesToPresent.Length; i++) 
         {
-            int randomImageIndex = UnityEngine.Random.Range(0, textures.Length);
+            int randomImageIndex = Random.Range(0, textures.Length);
             while (usedImages.Contains(randomImageIndex)) 
             {
-                randomImageIndex = UnityEngine.Random.Range(0, textures.Length);
+                randomImageIndex = Random.Range(0, textures.Length);
             }
 
             usedImages.Add(randomImageIndex);
@@ -52,11 +52,11 @@ public class MahjongMatrixCreator : MonoBehaviour
         var lines = txt.text.Split("\n"[0]);
 
         // Create the first row of the matrix + 2 for the 2 empty rows surrounding the matrix 
-        TilesMatrix = new Tile[GameManager.CurrentLevel.Length + 2][];
+        _gameManager.TilesMatrix = new Tile[GameManager.CurrentLevel.Length + 2][];
 
         for (int x = 0; x < GameManager.CurrentLevel.Length + 2; x++)
         {
-            TilesMatrix[x] = new Tile[GameManager.CurrentLevel.Height + 2];
+            _gameManager.TilesMatrix[x] = new Tile[GameManager.CurrentLevel.Height + 2];
         }
 
         // Check that we have the same length as number of lines
@@ -68,6 +68,7 @@ public class MahjongMatrixCreator : MonoBehaviour
 
         Dictionary<int, int> usedTiles = new Dictionary<int, int>();
 
+
         for (int i = 0; i < GameManager.CurrentLevel.Height; i++)
         {
             for (int j = 0; j < GameManager.CurrentLevel.Length ; j++)
@@ -75,7 +76,7 @@ public class MahjongMatrixCreator : MonoBehaviour
                 // No tile here
                 if (lines[i][j] == '0') 
                 {
-                    TilesMatrix[j + 1][i + 1] = null;
+                    _gameManager.TilesMatrix[j + 1][i + 1] = null;
                 }
                 else
                 {
@@ -87,11 +88,23 @@ public class MahjongMatrixCreator : MonoBehaviour
                         randomIndex = UnityEngine.Random.Range(0, _tilesToPresent.Length);
                     }
 
-                    TilesMatrix[j + 1][i + 1] = _tilesToPresent[randomIndex];
+                    var newTile = new Tile(_tilesToPresent[randomIndex].ID, _tilesToPresent[randomIndex].Icon)
+                    {
+                        Coordinates = new Vector2(j + 1, i + 1)
+                    };
+                    _gameManager.TilesMatrix[j + 1][i + 1] = newTile;
+
+                    if (_gameManager.SameTilesDictionary.ContainsKey(newTile.ID))
+                        _gameManager.SameTilesDictionary[newTile.ID].Add(newTile);
+                    else
+                        _gameManager.SameTilesDictionary.Add(newTile.ID, new List<Tile> { newTile });
+
                     CheckUsedTiles(randomIndex);
                 }
             }
         }
+
+        _matrixDisplayer.DisplayMatrix();
 
 
         void CheckUsedTiles(int randomIndex)
@@ -116,6 +129,7 @@ public class MahjongMatrixCreator : MonoBehaviour
                         }
                     }
 
+                    // TODO : VULNERABILITY, Can spawn just two different tiles at the end and the user can't play anymore
                     if (shouldResetDictionary)
                         usedTiles.Clear();
                 }
