@@ -10,11 +10,11 @@ public class LevelLoader : MonoBehaviour
     /// Method called by the MainMenu buttons to set the level to load and load the game scene
     /// </summary>
     /// <param name="name"></param>
-    public void LoadLevel(string name) 
+    public void LoadLevel(int index) 
     {
         foreach (var level in _levels) 
         {
-            if (string.Equals(name, level.Name)) 
+            if (index == level.Index) 
             {
                 GameManager.CurrentLevel = level;
                 break;
@@ -23,10 +23,22 @@ public class LevelLoader : MonoBehaviour
 
         if (GameManager.CurrentLevel == null)
         {
-            Debug.LogError("Couldn't find level with name {0}. Be sure it was added to the LevelLoader list.", gameObject);
+            Debug.LogErrorFormat("Couldn't find level with index {0}. Be sure it was added to the LevelLoader list.", index);
             return;
         }
 
         SceneManager.LoadSceneAsync(_gameSceneName);
+    }
+
+    public Level GetLevel(int index)
+    {
+        foreach (var level in _levels)
+        {
+            if (index == level.Index)
+                return level;
+        }
+
+        Debug.LogErrorFormat("Couldn't find level with index {0}. Be sure it was added to the LevelLoader list.", index);
+        return null;
     }
 }

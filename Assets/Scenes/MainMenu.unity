@@ -1481,11 +1481,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2094303868}
         m_MethodName: LoadLevel
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: Number Sign
           m_BoolArgument: 0
@@ -1853,11 +1853,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2094303868}
         m_MethodName: LoadLevel
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: One
           m_BoolArgument: 0
@@ -2138,7 +2138,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2094303868}
         m_MethodName: LoadLevel
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2666,11 +2666,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2094303868}
         m_MethodName: LoadLevel
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: Caro
           m_BoolArgument: 0
@@ -2796,11 +2796,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2094303868}
         m_MethodName: LoadLevel
-        m_Mode: 5
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: Up
           m_BoolArgument: 0
@@ -2926,6 +2926,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2094303869}
   - component: {fileID: 2094303868}
+  - component: {fileID: 2094303870}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -2966,3 +2967,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2094303870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094303867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e820eb6f8aeae0447ab5747b402f7138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _userScore: {fileID: 676371404}
+  _stars:
+  - {fileID: 1579643305}
+  - {fileID: 432433451}
+  - {fileID: 985001179}
+  - {fileID: 168775071}
+  - {fileID: 949032917}

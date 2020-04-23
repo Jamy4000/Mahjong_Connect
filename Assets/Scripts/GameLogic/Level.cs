@@ -3,6 +3,7 @@
 [CreateAssetMenu()]
 public class Level : ScriptableObject
 {
+    public int Index;
     public string Name;
     public string LayoutFileName;
     public bool IsDone = false;
