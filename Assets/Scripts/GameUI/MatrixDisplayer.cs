@@ -32,7 +32,7 @@ public class MatrixDisplayer : MonoBehaviour
             for (int j = 0; j < GameManager.CurrentLevel.Height + 2; j++)
             {
                 // If empty tile, we don't display anything
-                if (_gameManager.TilesMatrix[i][j] == null) 
+                if (_gameManager.TilesMatrix[i][j] == null || _gameManager.TilesMatrix[i][j].IsEmpty) 
                 {
                     Instantiate(_emptyTilePrefab, verticalLayout);
                 }

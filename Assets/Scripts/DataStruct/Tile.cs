@@ -5,7 +5,7 @@ public class Tile
     public UnityEngine.Sprite Icon;
     public string ID;
 
-    public bool IsSelected = false;
+    public bool IsEmpty = false;
     public UnityEngine.Vector2 Coordinates;
 
     public GameObject GameObjectRepresentation;
@@ -14,5 +14,10 @@ public class Tile
     {
         ID = iconName;
         Icon = icon;
+    }
+
+    public Tile()
+    {
+        IsEmpty = true;
     }
 }

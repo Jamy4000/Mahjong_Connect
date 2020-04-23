@@ -76,7 +76,8 @@ public class MahjongMatrixCreator : MonoBehaviour
                 // No tile here
                 if (lines[i][j] == '0') 
                 {
-                    _gameManager.TilesMatrix[j + 1][i + 1] = null;
+                    // We fill the matrix with an empty tile
+                    _gameManager.TilesMatrix[j + 1][i + 1] = new Tile();
                 }
                 else
                 {
@@ -131,7 +132,9 @@ public class MahjongMatrixCreator : MonoBehaviour
 
                     // TODO : VULNERABILITY, Can spawn just two different tiles at the end and the user can't play anymore
                     if (shouldResetDictionary)
+                    {
                         usedTiles.Clear();
+                    }
                 }
             }
             else
