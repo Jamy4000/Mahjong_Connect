@@ -6,6 +6,8 @@ public static class PathFinder
 
     public static bool PathValidExist(Tile thisTile, Tile currentlyClickedTile)
     {
+        return true;
+
         foreach (var path in _availablePaths)
         {
             if (path.From == currentlyClickedTile && path.To.Contains(thisTile))
@@ -17,12 +19,16 @@ public static class PathFinder
 
     public static void UpdateAvailablePaths()
     {
+        return;
+
         var tileMatrix = GameManager.Instance.TilesMatrix;
+
         for (int i = 1; i < tileMatrix.Length - 1; i++)
         {
             for (int j = 1; j < tileMatrix[i].Length - 1; j++)
             {
                 List<Tile> neighbors = new List<Tile>();
+
                 if (tileMatrix[i][j] != null)
                 {
                     CheckNeighbors(i - 1, j, i, j, 0, ref neighbors);
