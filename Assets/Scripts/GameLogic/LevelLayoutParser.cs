@@ -92,7 +92,7 @@ public static class LevelLayoutParser
     private static string[] ParseLayoutDocument()
     {
         // Fetch the layout file
-        string pathToLayout = System.IO.Path.Combine("Layouts", GameManager.Instance.CurrentLevel.LayoutFileName);
+        string pathToLayout = System.IO.Path.Combine("Layouts", GameManager.CurrentLevel.LayoutFileName);
         TextAsset txt = (TextAsset)Resources.Load(pathToLayout);
 
         // Split the file line by line using regular expressions

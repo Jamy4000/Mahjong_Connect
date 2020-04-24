@@ -9,7 +9,11 @@ public class GameManager : MonoBehaviour
         private set;
     }
 
-    public Level CurrentLevel;
+    /// <summary>
+    /// The level we're currently in. Set as static as it's used in both scenes.
+    /// </summary>
+    public static Level CurrentLevel;
+
     public Tile[][] TilesMatrix;
     public Dictionary<string, List<Vector2>> SameTilesCoordinates = new Dictionary<string, List<Vector2>>();
     public Tile CurrentlyClickedTile;
@@ -42,14 +46,15 @@ public class GameManager : MonoBehaviour
     private void ResetCurrentClickedTile(OnUserValideAnswer info)
     {
         CurrentlyClickedTile = null;
-        if (SameTilesCoordinates.ContainsKey(info.FirstTile.ID))
+        try
         {
             SameTilesCoordinates[info.FirstTile.ID].Remove(info.FirstTile.Coordinates);
             SameTilesCoordinates[info.FirstTile.ID].Remove(info.SecondTile.Coordinates);
         }
-        else 
+        catch (System.Exception e)
         {
-            Debug.LogError("TODO Change error message, but this shouldn't happen");
+            Debug.LogError("The tile wasn't found in the dictionary. This should not happen.Check that the tiles are correctly added and removed from the dictionary.\n" +
+                "Error is as follow: " + e.ToString());
         }
     }
 

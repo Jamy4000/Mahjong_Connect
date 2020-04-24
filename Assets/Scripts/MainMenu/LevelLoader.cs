@@ -16,12 +16,12 @@ public class LevelLoader : MonoBehaviour
         {
             if (index == level.Index) 
             {
-                GameManager.Instance.CurrentLevel = level;
+                GameManager.CurrentLevel = level;
                 break;
             }
         }
 
-        if (GameManager.Instance.CurrentLevel == null)
+        if (GameManager.CurrentLevel == null)
         {
             Debug.LogErrorFormat("Couldn't find level with index {0}. Be sure it was added to the LevelLoader list.", index);
             return;

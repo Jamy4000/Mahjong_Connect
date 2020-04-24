@@ -6,7 +6,9 @@ public static class TileIconsFetcher
     public static Texture2D[] FetchIcons(int fullTileAmount)
     {
         var allIcons = Resources.LoadAll<Texture2D>("TileIcons");
-        var tilesIcons = new Texture2D[fullTileAmount / 2];
+        // Generate random amount of possible tiles between fullTileAmount / 10 and fullTileAmount / 2. 
+        // This will increase the possibility to have multiple possibilities of tile pairs
+        var tilesIcons = new Texture2D[Random.Range(fullTileAmount / 10, fullTileAmount / 2)];
         var usedIndex = new List<int>(allIcons.Length > fullTileAmount ? fullTileAmount : allIcons.Length);
 
         for (int i = 0; i < tilesIcons.Length; i++)
