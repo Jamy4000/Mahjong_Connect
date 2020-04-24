@@ -59,7 +59,7 @@ public static class PathFinder
         var tileMatrix = GameManager.Instance.TilesMatrix;
 
         // if the current neighbor isn't an empty tile
-        if (tileMatrix[i][j] != null && !tileMatrix[i][j].IsEmpty) 
+        if (!tileMatrix[i][j].IsEmpty) 
         {
             if (tileMatrix[i][j].ID == tileMatrix[originalI][originalJ].ID && i != originalI && j != originalJ) 
             {
