@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static Level CurrentLevel;
+    public static GameManager Instance 
+    {
+        get;
+        private set;
+    }
 
-    public static GameManager Instance;
-
+    public Level CurrentLevel;
     public Tile[][] TilesMatrix;
     public Dictionary<string, List<Vector2>> SameTilesCoordinates = new Dictionary<string, List<Vector2>>();
     public Tile CurrentlyClickedTile;

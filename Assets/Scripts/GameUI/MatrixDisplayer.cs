@@ -60,12 +60,19 @@ public class MatrixDisplayer : MonoBehaviour
 
         void ReplaceOneTile(Vector2 coordinates)
         {
-            Destroy(_gameManager.TilesMatrix[(int)coordinates.x][(int)coordinates.y].GameObjectRepresentation);
-            _gameManager.TilesMatrix[(int)coordinates.x][(int)coordinates.y] = new Tile();
+            var tileObject = _gameManager.TilesMatrix[(int)coordinates.x][(int)coordinates.y].GameObjectRepresentation;
 
-            var parent = transform.GetChild((int)coordinates.x);
-            var newTile = Instantiate(_emptyTilePrefab, parent);
-            newTile.transform.SetSiblingIndex((int)coordinates.y);
+            // Destroy all components and gameObject that we don't need anymore
+            Destroy(tileObject.transform.GetChild(0).gameObject);
+            Destroy(tileObject.GetComponent<Button>());
+            Destroy(tileObject.GetComponent<TileClickHandler>());
+            Destroy(tileObject.GetComponent<Animator>());
+
+            // set empty tile to transparent
+            tileObject.GetComponent<Image>().color = new Color(0, 0, 0, 0);
+
+            // Set the tile in the matrix as a new empty tile
+            _gameManager.TilesMatrix[(int)coordinates.x][(int)coordinates.y] = new Tile();
         }
     }
 }

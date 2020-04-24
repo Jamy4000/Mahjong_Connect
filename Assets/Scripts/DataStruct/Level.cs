@@ -9,10 +9,4 @@ public class Level : ScriptableObject
 
     public bool IsDone = false;
     public int Score = 0;
-
-    // x
-    public int Height;
-    
-    // y
-    public int Length;
 }

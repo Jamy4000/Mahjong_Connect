@@ -30,13 +30,13 @@ public class MahjongMatrixCreator : MonoBehaviour
 
     private bool GenerateMatrix(Texture2D[] tilesIcons, bool[][] layout)
     {
-        _gameManager.TilesMatrix = new Tile[GameManager.CurrentLevel.Height + 2][];
+        _gameManager.TilesMatrix = new Tile[layout.Length][];
         Dictionary<int, int> usedIcons = new Dictionary<int, int>();
 
         // We go through all the lines in the document + 2 (first and last rows are empty)
         for (int i = 0; i < _gameManager.TilesMatrix.Length; i++)
         {
-            _gameManager.TilesMatrix[i] = new Tile[GameManager.CurrentLevel.Length + 2];
+            _gameManager.TilesMatrix[i] = new Tile[layout[i].Length];
 
             // we go through all characters in the current line, + 2 (first and last columns are empty)
             for (int j = 0; j < _gameManager.TilesMatrix[i].Length; j++)

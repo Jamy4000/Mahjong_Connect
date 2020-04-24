@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text.RegularExpressions;
+using UnityEngine;
 
 public static class LevelLayoutParser
 {
@@ -13,12 +14,14 @@ public static class LevelLayoutParser
             return false;
         }
 
-        layout = new bool[GameManager.CurrentLevel.Height + 2][];
+        layout = new bool[lines.Length + 2][];
+        // All lines should be the same length, as we work with x*y squares.
+        int lineLength = lines[0].Length + 2;
 
         // We go through all the lines in the document + 2 (first and last rows are empty)
         for (int i = 0; i < layout.Length; i++)
         {
-            layout[i] = new bool[GameManager.CurrentLevel.Length + 2];
+            layout[i] = new bool[lineLength];
 
             // If first or last line
             if (i == 0 || i == layout.Length - 1)
@@ -50,7 +53,7 @@ public static class LevelLayoutParser
                                 fullTileAmount++;
                                 break;
                             default:
-                                Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[i + 1][j + 1]);
+                                Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[i - 1][j - 1]);
                                 return false;
                         }
                     }
@@ -58,8 +61,14 @@ public static class LevelLayoutParser
             }
         }
 
+        CheckForOddTileAmount(ref layout, ref fullTileAmount);
+        return true;
+    }
+
+    private static void CheckForOddTileAmount(ref bool[][] layout, ref int fullTileAmount)
+    {
         // Checking if we have an odd number of tiles
-        if (fullTileAmount % 2 == 1) 
+        if (fullTileAmount % 2 == 1)
         {
             // We remove one from the final amount
             fullTileAmount--;
@@ -69,34 +78,25 @@ public static class LevelLayoutParser
             {
                 for (int j = 1; j < layout[i].Length - 1; j++)
                 {
-                    if (layout[i][j]) 
+                    if (layout[i][j])
                     {
                         layout[i][j] = false;
-                        return true;
+                        return;
                     }
 
                 }
             }
         }
-
-        return true;
     }
 
     private static string[] ParseLayoutDocument()
     {
         // Fetch the layout file
-        string pathToLayout = System.IO.Path.Combine("Layouts", GameManager.CurrentLevel.LayoutFileName);
+        string pathToLayout = System.IO.Path.Combine("Layouts", GameManager.Instance.CurrentLevel.LayoutFileName);
         TextAsset txt = (TextAsset)Resources.Load(pathToLayout);
 
-        // Split the file line by line
-        var lines = txt.text.Split("\n"[0]);
-
-        // Check that we have the same length as number of lines
-        if (lines.Length != GameManager.CurrentLevel.Height)
-        {
-            Debug.LogError("The amount of lines in the layout file is different than the current level Length level. That's not possible. Not creating the Game.");
-            return null;
-        }
+        // Split the file line by line using regular expressions
+        var lines = Regex.Split(txt.text, "\r\n|\r|\n");
 
         return lines;
     }
