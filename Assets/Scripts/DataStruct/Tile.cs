@@ -30,19 +30,22 @@ public class Tile : IHasNeighbours<Tile>
     public static Tile CreateNewTile(ref Dictionary<int, int> usedIcons, Texture2D[] tilesIcons, int2 coordinates)
     {
         int randomIndex = Random.Range(0, tilesIcons.Length);
+        Debug.Log("tilesIcons.Length " + tilesIcons.Length);
 
         // If we already used this tile and this tile was used 2 times, we generate a new random index
         while (usedIcons.ContainsKey(randomIndex) && usedIcons[randomIndex] == 2)
             randomIndex = Random.Range(0, tilesIcons.Length);
 
+        Debug.Log("randomIndex " + randomIndex);
+
         var newTile = new Tile(tilesIcons[randomIndex].name, tilesIcons[randomIndex], coordinates);
         GameManager.Instance.AddNewTileToDicitonary(newTile);
 
-        CheckUsedIcons(ref usedIcons, tilesIcons.Length, randomIndex);
+        CheckUsedIcons(ref usedIcons, tilesIcons, randomIndex);
         return newTile;
     }
 
-    private static void CheckUsedIcons(ref Dictionary<int, int> usedIcons, int tilesIconLength, int randomIndex)
+    private static void CheckUsedIcons(ref Dictionary<int, int> usedIcons, Texture2D[] tilesIcon, int randomIndex)
     {
         // The icon was already used before
         if (usedIcons.ContainsKey(randomIndex))
@@ -50,7 +53,7 @@ public class Tile : IHasNeighbours<Tile>
             usedIcons[randomIndex]++;
 
             // if we used all possible tiles to present
-            if (usedIcons.Count == tilesIconLength)
+            if (usedIcons.Count == tilesIcon.Length)
             {
                 bool shouldResetDictionary = true;
 

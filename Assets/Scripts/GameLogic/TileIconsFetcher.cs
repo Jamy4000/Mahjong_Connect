@@ -3,12 +3,19 @@ using System.Collections.Generic;
 
 public static class TileIconsFetcher
 {
+    private static Texture2D[] allIcons;
+
     public static Texture2D[] FetchIcons(int fullTileAmount)
     {
-        var allIcons = Resources.LoadAll<Texture2D>("TileIcons");
+        allIcons = Resources.LoadAll<Texture2D>("TileIcons");
+        return GenerateTextureArray(fullTileAmount, fullTileAmount / 10);
+    }
+
+    public static Texture2D[] GenerateTextureArray(int fullTileAmount, int minIconAmount)
+    {
         // Generate random amount of possible tiles between fullTileAmount / 10 and fullTileAmount / 2. 
         // This will increase the possibility to have multiple possibilities of tile pairs
-        var tilesIcons = new Texture2D[Random.Range(fullTileAmount / 10, fullTileAmount / 2)];
+        var tilesIcons = new Texture2D[Random.Range(minIconAmount, fullTileAmount / 2)];
         var usedIndex = new List<int>(allIcons.Length > fullTileAmount ? fullTileAmount : allIcons.Length);
 
         for (int i = 0; i < tilesIcons.Length; i++)
@@ -20,7 +27,7 @@ public static class TileIconsFetcher
 
             usedIndex.Add(randomIndex);
 
-            if (usedIndex.Count == allIcons.Length) 
+            if (usedIndex.Count == allIcons.Length)
                 usedIndex.Clear();
 
             tilesIcons[i] = allIcons[randomIndex];

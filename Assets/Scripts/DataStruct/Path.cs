@@ -11,22 +11,20 @@ public class Path<Node> : IEnumerable<Node>
 {
     public Node LastStep { get; private set; }
     public Path<Node> PreviousSteps { get; private set; }
-    public int SubCost { get; private set; }
     public double TotalCost { get; private set; }
 
-    private Path(Node lastStep, Path<Node> previousSteps, int subCost, double totalCost)
+    private Path(Node lastStep, Path<Node> previousSteps, double totalCost)
     {
         LastStep = lastStep;
         PreviousSteps = previousSteps;
-        SubCost = subCost;
         TotalCost = totalCost;
     }
 
-    public Path(Node start) : this(start, null, 0, 0)  { }
+    public Path(Node start) : this(start, null, 0)  { }
 
     public Path<Node> AddStep(Node step, int stepCost)
     {
-        return new Path<Node>(step, this, SubCost + stepCost, TotalCost + stepCost);
+        return new Path<Node>(step, this, TotalCost + stepCost);
     }
 
     public IEnumerator<Node> GetEnumerator()

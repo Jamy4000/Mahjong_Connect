@@ -17,7 +17,7 @@ public class MahjongMatrixCreator : MonoBehaviour
         {
             Texture2D[] tilesIcons = TileIconsFetcher.FetchIcons(fullTileAmount);
 
-            if (GenerateMatrix(tilesIcons, layout))
+            if (GenerateMatrix(tilesIcons, layout, fullTileAmount))
                 _matrixDisplayer.DisplayMatrix();
             else
                 _matrixDisplayer.DisplayError();
@@ -30,10 +30,11 @@ public class MahjongMatrixCreator : MonoBehaviour
         }
     }
 
-    private bool GenerateMatrix(Texture2D[] tilesIcons, bool[][] layout)
+    private bool GenerateMatrix(Texture2D[] tilesIcons, bool[][] layout, int fullTileAmount)
     {
         _gameManager.TilesMatrix = new Tile[layout.Length][];
         Dictionary<int, int> usedIcons = new Dictionary<int, int>();
+        int addedTiles = 0;
 
         // We go through all the lines in the layout
         for (int x = 0; x < layout.Length; x++)
@@ -43,7 +44,19 @@ public class MahjongMatrixCreator : MonoBehaviour
             // we go through all characters in the current line
             for (int y = 0; y < _gameManager.TilesMatrix[x].Length; y++)
             {
-                _gameManager.TilesMatrix[x][y] = layout[x][y] ? Tile.CreateNewTile(ref usedIcons, tilesIcons, new Unity.Mathematics.int2(x, y)) : new Tile(new Unity.Mathematics.int2(x, y));
+                if (layout[x][y]) 
+                {
+                    _gameManager.TilesMatrix[x][y] = Tile.CreateNewTile(ref usedIcons, tilesIcons, new Unity.Mathematics.int2(x, y));
+                    addedTiles++;
+                }
+                else
+                {
+                    _gameManager.TilesMatrix[x][y] = new Tile(new Unity.Mathematics.int2(x, y));
+                }
+
+                // when we reset the usedIcons dictionary
+                if (usedIcons.Count == 0) 
+                    tilesIcons = TileIconsFetcher.GenerateTextureArray(fullTileAmount - addedTiles, (fullTileAmount - addedTiles) / 2);
             }
         }
 

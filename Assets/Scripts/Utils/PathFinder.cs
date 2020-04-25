@@ -26,17 +26,19 @@ public static class PathFinder
     {
         var gameManager = GameManager.Instance;
         var tileMatrix = gameManager.TilesMatrix;
+        bool displayDebug = gameManager.DisplayDebug;
 
         List<SimplifiedPath> createdPaths = new List<SimplifiedPath>(); 
 
         // for all tiles in the dictionary
         foreach (var lists in gameManager.SameTilesDictionary)
         {
-            UnityEngine.Debug.Log("");
-            UnityEngine.Debug.Log("<Color=red>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</Color>");
-            UnityEngine.Debug.Log("<Color=red>Checking Tile with id </Color>" + lists.Key);
-            UnityEngine.Debug.Log("<Color=red>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</Color>");
-            UnityEngine.Debug.Log("");
+            if (displayDebug)
+            {
+                UnityEngine.Debug.Log("<Color=red>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</Color>");
+                UnityEngine.Debug.Log("<Color=red>Checking Tile with id </Color>" + lists.Key);
+                UnityEngine.Debug.Log("<Color=red>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</Color>");
+            }
 
             // check all possible start
             for (int i = 0; i < lists.Value.Count; i++)
@@ -44,14 +46,15 @@ public static class PathFinder
                 // check all possible destinations
                 for (int j = 0; j < lists.Value.Count; j++)
                 {
-                    UnityEngine.Debug.Log("Checking " + lists.Value[j].Coordinates + " with " + lists.Value[i].Coordinates);
+                    if (displayDebug)
+                        UnityEngine.Debug.Log("Checking " + lists.Value[j].Coordinates + " with " + lists.Value[i].Coordinates);
 
                     // Check if we're not checking the same tile and if the path wasn't already created, but the other way around
                     int index = createdPaths.FindIndex(p => p.From == lists.Value[j] && p.To == lists.Value[i]);
                     if (i == j || index >= 0)
                         continue;
 
-                    Path<Tile> path = FindAStarPath(lists.Value[i], lists.Value[j]);
+                    Path<Tile> path = FindAStarPath(lists.Value[i], lists.Value[j], displayDebug);
                     
                     if (path != null)
                     {
@@ -61,24 +64,22 @@ public static class PathFinder
                 }
             }
 
-            UnityEngine.Debug.Log("Found " + createdPaths.Count);
             createdPaths.Clear();
         }
     }
 
-    public static Path<Tile> FindAStarPath(Tile start, Tile destination)
+    public static Path<Tile> FindAStarPath(Tile start, Tile destination, bool displayDebug)
     {
         var closed = new HashSet<Tile>();
         var queue = new PriorityQueue<double, Path<Tile>>();
 
         queue.Enqueue(0, new Path<Tile>(start));
 
-        Tile previousTile = start;
-
         while (!queue.IsEmpty)
         {
             var path = queue.Dequeue();
-            Debug.Log("Path now on " + path.LastStep.Coordinates);
+            if (displayDebug)
+                Debug.Log("<Color=blue>PATH NOW ON " + path.LastStep.Coordinates + "</Color>");
 
             if (closed.Contains(path.LastStep))
                 continue;
@@ -90,28 +91,30 @@ public static class PathFinder
 
             foreach (Tile n in path.LastStep.Neighbours)
             {
-                Debug.Log("Checking tile " + n.Coordinates);
+                if (displayDebug)
+                    Debug.Log("Checking tile " + n.Coordinates);
+
                 // We only go forward if the next tile is empty or is the destination
                 if (n.IsEmpty || n == destination)
                 {
-                    Debug.Log("n.IsEmpty " + n.IsEmpty);
-                    int cost = IsTurning(path.LastStep, n, previousTile);
-                    if ((path.SubCost + cost) / WEIGHT_FACTOR < 3)
+                    int cost = path.PreviousSteps != null ? IsTurning(path.PreviousSteps.LastStep, path.LastStep, n) : 0;
+                    
+                    if (displayDebug)
+                        Debug.Log("(path.SubCost + cost)  / WEIGHT_FACTOR " + ((path.TotalCost + cost) / WEIGHT_FACTOR));
+                    
+                    if ((path.TotalCost + cost) / WEIGHT_FACTOR < 3)
                     {
-                        Debug.Log("YES ");
                         var newPath = path.AddStep(n, cost);
                         queue.Enqueue(newPath.TotalCost + ManhattanHeuristic(n, destination), newPath);
                     }
                 }
             }
-
-            previousTile = path.LastStep;
         }
 
         return null;
     }
 
-    private static int IsTurning(Tile currentNode, Tile nextNode, Tile previousNode)
+    private static int IsTurning(Tile previousNode, Tile currentNode, Tile nextNode)
     {
         bool isGoingHorizontal = (currentNode.Coordinates.x == nextNode.Coordinates.x) && (currentNode.Coordinates.x == previousNode.Coordinates.x);
         bool isGoingVertical = (currentNode.Coordinates.y == nextNode.Coordinates.y) && (currentNode.Coordinates.y == previousNode.Coordinates.y);
