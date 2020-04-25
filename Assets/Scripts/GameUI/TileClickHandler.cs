@@ -51,6 +51,7 @@ public class TileClickHandler : MonoBehaviour
 
     private void CancelClick()
     {
+        _gameManager.CurrentlyClickedTile = null;
         _animator.SetTrigger("Deselect");
     }
 }

@@ -13,11 +13,11 @@ public class MahjongMatrixCreator : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
 
-        if (LevelLayoutParser.GetLevelLayout(out bool[][] layout, out int fullTileAmount))
+        if (LevelLayoutParser.GetLevelLayout(out bool[][] layout))
         {
-            Texture2D[] tilesIcons = TileIconsFetcher.FetchIcons(fullTileAmount);
+            Texture2D[] tilesIcons = TileIconsFetcher.FetchIcons();
 
-            if (GenerateMatrix(tilesIcons, layout, fullTileAmount))
+            if (GenerateMatrix(tilesIcons, layout))
                 _matrixDisplayer.DisplayMatrix();
             else
                 _matrixDisplayer.DisplayError();
@@ -28,7 +28,7 @@ public class MahjongMatrixCreator : MonoBehaviour
         }
     }
 
-    private bool GenerateMatrix(Texture2D[] tilesIcons, bool[][] layout, int fullTileAmount)
+    private bool GenerateMatrix(Texture2D[] tilesIcons, bool[][] layout)
     {
         _gameManager.TilesMatrix = new Tile[layout.Length][];
         Dictionary<int, int> usedIcons = new Dictionary<int, int>();
@@ -54,7 +54,7 @@ public class MahjongMatrixCreator : MonoBehaviour
 
                 // when we reset the usedIcons dictionary
                 if (usedIcons.Count == 0) 
-                    tilesIcons = TileIconsFetcher.GenerateTextureArray(fullTileAmount - addedTiles, (fullTileAmount - addedTiles) / 2);
+                    tilesIcons = TileIconsFetcher.GenerateTextureArray(_gameManager.TileAmount - addedTiles, (_gameManager.TileAmount - addedTiles) / 2);
             }
         }
 

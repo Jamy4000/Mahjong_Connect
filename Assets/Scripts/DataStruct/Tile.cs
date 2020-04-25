@@ -36,7 +36,7 @@ public class Tile : IHasNeighbours<Tile>
             randomIndex = Random.Range(0, tilesIcons.Length);
 
         var newTile = new Tile(tilesIcons[randomIndex].name, tilesIcons[randomIndex], coordinates);
-        GameManager.Instance.AddNewTileToDicitonary(newTile);
+        GameManager.Instance.AddNewTileToDictionary(newTile);
 
         CheckUsedIcons(ref usedIcons, tilesIcons, randomIndex);
         return newTile;

@@ -1,21 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuLoader : MonoBehaviour
+public class ReloadButtonHandler : MonoBehaviour
 {
-    [SerializeField] private string _mainMenuName = "MainMenu";
     [SerializeField] private Animator _validationPanel;
 
-    public void MenuButtonCallback()
+    public void RestartButtonCallback()
     {
         Debug.Log("TODO ANIMATION");
         _validationPanel.gameObject.SetActive(true);
         _validationPanel.SetTrigger("ShowPanel");
     }
 
-    public void OnUserValidate()
+    public void OnUserValidate() 
     {
-        SceneManager.LoadSceneAsync(_mainMenuName);
+        SceneManager.LoadSceneAsync(gameObject.scene.buildIndex);
     }
 
     public void OnUserCancel()

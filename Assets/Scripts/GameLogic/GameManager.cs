@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -18,6 +19,15 @@ public class GameManager : MonoBehaviour
     public Dictionary<string, List<Tile>> SameTilesDictionary = new Dictionary<string, List<Tile>>();
     public Tile CurrentlyClickedTile;
 
+    public int CurrentScore
+    {
+        get;
+        private set;
+    }
+
+    public int TileAmount;
+    private int _correctAnswerAmount = 0;
+
     private void Awake()
     {
         if (Instance != null) 
@@ -28,7 +38,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        OnUserValideAnswer.Listeners += ResetCurrentClickedTile;
+        OnUserValideAnswer.Listeners += UserGaveValidAnswerCallback;
         OnUserError.Listeners += ResetCurrentClickedTile;
     }
 
@@ -38,34 +48,75 @@ public class GameManager : MonoBehaviour
         {
             Instance = null;
 
-            OnUserValideAnswer.Listeners -= ResetCurrentClickedTile;
+            OnUserValideAnswer.Listeners -= UserGaveValidAnswerCallback;
             OnUserError.Listeners -= ResetCurrentClickedTile;
         }
     }
 
-    private void ResetCurrentClickedTile(OnUserValideAnswer info)
+    private void UserGaveValidAnswerCallback(OnUserValideAnswer info)
     {
         CurrentlyClickedTile = null;
-        try
+
+        // Update Same Tiles Dictionary
+        SameTilesDictionary[info.FirstTile.ID].Remove(info.FirstTile);
+        SameTilesDictionary[info.FirstTile.ID].Remove(info.SecondTile);
+        if (SameTilesDictionary[info.FirstTile.ID].Count == 0)
+            SameTilesDictionary.Remove(info.FirstTile.ID);
+
+        // Update Current Score
+        CurrentScore += 15;
+        _correctAnswerAmount++;
+
+        CheckRemainingPairs();
+    }
+
+    private void CheckRemainingPairs()
+    {
+        if (SameTilesDictionary.Count == 0)
+            new OnGameEnded(true);
+        else
+            CheckIfGameIsLost();
+    }
+
+    private void CheckIfGameIsLost()
+    {
+        bool hasLost = true;
+
+        foreach (var sameTiles in SameTilesDictionary.Values)
         {
-            SameTilesDictionary[info.FirstTile.ID].Remove(info.FirstTile);
-            SameTilesDictionary[info.FirstTile.ID].Remove(info.SecondTile);
-            if (SameTilesDictionary[info.FirstTile.ID].Count == 0)
-                SameTilesDictionary.Remove(info.FirstTile.ID);
+            for (int i = 0; i < sameTiles.Count; i++)
+            {
+                for (int j = 0; j < sameTiles.Count; j++)
+                {
+                    if (i == j)
+                        continue;
+
+                    if (PathFinder.FetchPath(sameTiles[i], sameTiles[j], false) != null)
+                    {
+                        hasLost = false;
+                        break;
+                    }
+                }
+
+                if (!hasLost)
+                    break;
+            }
+
+            if (!hasLost)
+                break;
         }
-        catch (System.Exception e)
-        {
-            Debug.LogError("The tile wasn't found in the dictionary. This should not happen.Check that the tiles are correctly added and removed from the dictionary.\n" +
-                "Error is as follow: " + e.ToString());
-        }
+
+        if (hasLost)
+            new OnGameEnded(false);
     }
 
     private void ResetCurrentClickedTile(OnUserError info)
     {
         CurrentlyClickedTile = null;
+        CurrentScore = Mathf.Clamp(CurrentScore - 10, 0, CurrentScore);
     }
 
-    internal void AddNewTileToDicitonary(Tile newTile)
+    internal void AddNewTileToDictionary(Tile newTile)
     {
         if (SameTilesDictionary.ContainsKey(newTile.ID))
             SameTilesDictionary[newTile.ID].Add(newTile);

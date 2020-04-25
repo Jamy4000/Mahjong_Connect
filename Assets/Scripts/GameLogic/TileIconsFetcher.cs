@@ -5,10 +5,10 @@ public static class TileIconsFetcher
 {
     private static Texture2D[] allIcons;
 
-    public static Texture2D[] FetchIcons(int fullTileAmount)
+    public static Texture2D[] FetchIcons()
     {
         allIcons = Resources.LoadAll<Texture2D>("TileIcons");
-        return GenerateTextureArray(fullTileAmount, fullTileAmount / 10);
+        return GenerateTextureArray(GameManager.Instance.TileAmount, GameManager.Instance.TileAmount / 10);
     }
 
     public static Texture2D[] GenerateTextureArray(int fullTileAmount, int minIconAmount)

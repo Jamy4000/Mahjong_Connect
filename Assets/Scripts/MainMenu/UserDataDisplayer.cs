@@ -10,7 +10,7 @@ public class UserDataDisplayer : MonoBehaviour
 
     private LevelLoader _levelLoader;
 
-    private const string USER_LEVEL_SCORE = "UserLevelScore";
+    public const string USER_LEVEL_SCORE = "UserLevelScore";
 
     private void Awake()
     {

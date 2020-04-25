@@ -3,9 +3,9 @@ using UnityEngine;
 
 public static class LevelLayoutParser
 {
-    public static bool GetLevelLayout(out bool[][] layout, out int fullTileAmount)
+    public static bool GetLevelLayout(out bool[][] layout)
     {
-        fullTileAmount = 0;
+        GameManager.Instance.TileAmount = 0;
         string[] lines = ParseLayoutDocument();
 
         if (lines == null)
@@ -50,7 +50,7 @@ public static class LevelLayoutParser
                                 break;
                             case 'X':
                                 layout[x][y] = true;
-                                fullTileAmount++;
+                                GameManager.Instance.TileAmount++;
                                 break;
                             default:
                                 Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[x - 1][y - 1]);
@@ -61,17 +61,17 @@ public static class LevelLayoutParser
             }
         }
 
-        CheckForOddTileAmount(ref layout, ref fullTileAmount);
+        CheckForOddTileAmount(ref layout);
         return true;
     }
 
-    private static void CheckForOddTileAmount(ref bool[][] layout, ref int fullTileAmount)
+    private static void CheckForOddTileAmount(ref bool[][] layout)
     {
         // Checking if we have an odd number of tiles
-        if (fullTileAmount % 2 == 1)
+        if (GameManager.Instance.TileAmount % 2 == 1)
         {
             // We remove one from the final amount
-            fullTileAmount--;
+            GameManager.Instance.TileAmount--;
 
             // We go through the layout matrix and set the first available value to false. Starting from 1 as first row and columns are empty
             for (int i = 1; i < layout.Length - 1; i++)
