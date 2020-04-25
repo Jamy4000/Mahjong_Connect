@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public bool DisplayDebug;
-
     public static GameManager Instance 
     {
         get;
@@ -52,6 +50,8 @@ public class GameManager : MonoBehaviour
         {
             SameTilesDictionary[info.FirstTile.ID].Remove(info.FirstTile);
             SameTilesDictionary[info.FirstTile.ID].Remove(info.SecondTile);
+            if (SameTilesDictionary[info.FirstTile.ID].Count == 0)
+                SameTilesDictionary.Remove(info.FirstTile.ID);
         }
         catch (System.Exception e)
         {

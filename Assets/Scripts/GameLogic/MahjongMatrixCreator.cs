@@ -21,8 +21,6 @@ public class MahjongMatrixCreator : MonoBehaviour
                 _matrixDisplayer.DisplayMatrix();
             else
                 _matrixDisplayer.DisplayError();
-
-            PathFinder.CalculateAllAvailablePaths();
         }
         else
         {

@@ -30,13 +30,10 @@ public class Tile : IHasNeighbours<Tile>
     public static Tile CreateNewTile(ref Dictionary<int, int> usedIcons, Texture2D[] tilesIcons, int2 coordinates)
     {
         int randomIndex = Random.Range(0, tilesIcons.Length);
-        Debug.Log("tilesIcons.Length " + tilesIcons.Length);
 
         // If we already used this tile and this tile was used 2 times, we generate a new random index
         while (usedIcons.ContainsKey(randomIndex) && usedIcons[randomIndex] == 2)
             randomIndex = Random.Range(0, tilesIcons.Length);
-
-        Debug.Log("randomIndex " + randomIndex);
 
         var newTile = new Tile(tilesIcons[randomIndex].name, tilesIcons[randomIndex], coordinates);
         GameManager.Instance.AddNewTileToDicitonary(newTile);
