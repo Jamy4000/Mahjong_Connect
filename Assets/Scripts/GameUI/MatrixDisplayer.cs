@@ -5,18 +5,13 @@ using UnityEngine.UI;
 public class MatrixDisplayer : MonoBehaviour
 {
     private GameManager _gameManager;
-    [SerializeField] private GameObject _horizontalLayoutPrefab;
+    [SerializeField] private GameObject _verticalLayoutPrefab;
     [SerializeField] private GameObject _tilePrefab;
     [SerializeField] private GameObject _emptyTilePrefab;
 
     private void Awake()
     {
         OnUserValideAnswer.Listeners += ReplaceTiles;
-    }
-
-    private void Start()
-    {
-        _gameManager = GameManager.Instance;
     }
 
     internal void DisplayError()
@@ -31,24 +26,26 @@ public class MatrixDisplayer : MonoBehaviour
 
     public void DisplayMatrix()
     {
-        for (int i = 0; i < _gameManager.TilesMatrix.Length; i++)
-        {
-            var horizontalLayout = Instantiate(_horizontalLayoutPrefab, transform).transform;
+        _gameManager = GameManager.Instance;
 
-            for (int j = 0; j < _gameManager.TilesMatrix[i].Length; j++)
+        for (int x = 0; x < _gameManager.TilesMatrix.Length; x++)
+        {
+            var verticalLayout = Instantiate(_verticalLayoutPrefab, transform).transform;
+
+            for (int y = 0; y < _gameManager.TilesMatrix[0].Length; y++)
             {
                 // If empty tile, we don't display anything
-                if (_gameManager.TilesMatrix[i][j].IsEmpty) 
+                if (_gameManager.TilesMatrix[x][y].IsEmpty) 
                 {
-                    var newTile = Instantiate(_emptyTilePrefab, horizontalLayout);
-                    _gameManager.TilesMatrix[i][j].GameObjectRepresentation = newTile;
+                    var newTile = Instantiate(_emptyTilePrefab, verticalLayout);
+                    _gameManager.TilesMatrix[x][y].GameObjectRepresentation = newTile;
                 }
                 else 
                 {
-                    var newTile = Instantiate(_tilePrefab, horizontalLayout);
-                    _gameManager.TilesMatrix[i][j].GameObjectRepresentation = newTile;
-                    newTile.transform.GetChild(0).GetComponent<Image>().sprite = _gameManager.TilesMatrix[i][j].Icon;
-                    newTile.GetComponent<TileClickHandler>().ThisTile = _gameManager.TilesMatrix[i][j];
+                    var newTile = Instantiate(_tilePrefab, verticalLayout);
+                    _gameManager.TilesMatrix[x][y].GameObjectRepresentation = newTile;
+                    newTile.transform.GetChild(0).GetComponent<Image>().sprite = _gameManager.TilesMatrix[x][y].Icon;
+                    newTile.GetComponent<TileClickHandler>().ThisTile = _gameManager.TilesMatrix[x][y];
                 }
             }
         }

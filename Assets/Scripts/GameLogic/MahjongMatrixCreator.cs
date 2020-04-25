@@ -35,15 +35,15 @@ public class MahjongMatrixCreator : MonoBehaviour
         _gameManager.TilesMatrix = new Tile[layout.Length][];
         Dictionary<int, int> usedIcons = new Dictionary<int, int>();
 
-        // We go through all the lines in the document + 2 (first and last rows are empty)
-        for (int i = 0; i < _gameManager.TilesMatrix.Length; i++)
+        // We go through all the lines in the layout
+        for (int x = 0; x < layout.Length; x++)
         {
-            _gameManager.TilesMatrix[i] = new Tile[layout[i].Length];
+            _gameManager.TilesMatrix[x] = new Tile[layout[0].Length];
 
-            // we go through all characters in the current line, + 2 (first and last columns are empty)
-            for (int j = 0; j < _gameManager.TilesMatrix[i].Length; j++)
+            // we go through all characters in the current line
+            for (int y = 0; y < _gameManager.TilesMatrix[x].Length; y++)
             {
-                _gameManager.TilesMatrix[i][j] = layout[i][j] ? Tile.CreateNewTile(ref usedIcons, tilesIcons, new Unity.Mathematics.int2(i, j)) : new Tile(new Unity.Mathematics.int2(i, j));
+                _gameManager.TilesMatrix[x][y] = layout[x][y] ? Tile.CreateNewTile(ref usedIcons, tilesIcons, new Unity.Mathematics.int2(x, y)) : new Tile(new Unity.Mathematics.int2(x, y));
             }
         }
 

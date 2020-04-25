@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PathsDisplayer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class TileHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Tile _thisTile;
     public bool _isBeingHovered = true;

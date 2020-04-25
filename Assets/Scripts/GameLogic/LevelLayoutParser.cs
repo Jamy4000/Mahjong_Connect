@@ -14,46 +14,46 @@ public static class LevelLayoutParser
             return false;
         }
 
-        layout = new bool[lines.Length + 2][];
-        // All lines should be the same length, as we work with x*y squares.
+        // Basically how much char do we have per line, +2 for empty char
         int lineLength = lines[0].Length + 2;
+        layout = new bool[lineLength][];
 
-        // We go through all the lines in the document + 2 (first and last rows are empty)
-        for (int i = 0; i < layout.Length; i++)
+        // We go through all the char in a line + 2 to create columns (first and last columns are empty)
+        for (int x = 0; x < lineLength; x++)
         {
-            layout[i] = new bool[lineLength];
+            layout[x] = new bool[lines.Length + 2];
 
             // If first or last line
-            if (i == 0 || i == layout.Length - 1)
+            if (x == 0 || x == lineLength - 1)
             {
                 // fill the matrix with empty tiles
-                for (int j = 0; j < layout[i].Length; j++)
-                    layout[i][j] = false;
+                for (int y = 0; y < layout[x].Length; y++)
+                    layout[x][y] = false;
             }
             else
             {
                 // we go through all characters in the current line, + 2 (first and last columns are empty)
-                for (int j = 0; j < layout[i].Length; j++)
+                for (int y = 0; y < layout[x].Length; y++)
                 {
                     // If first or last character (do not exist in the document), we have an empty tile
-                    if (j == 0 || j == layout[i].Length - 1)
+                    if (y == 0 || y == layout[x].Length - 1)
                     {
-                        layout[i][j] = false;
+                        layout[x][y] = false;
                     }
                     else
                     {
                         // Depending on the character, the current tile is either empty or not
-                        switch (lines[i - 1][j - 1])
+                        switch (lines[y - 1][x - 1])
                         {
                             case '0':
-                                layout[i][j] = false;
+                                layout[x][y] = false;
                                 break;
                             case 'X':
-                                layout[i][j] = true;
+                                layout[x][y] = true;
                                 fullTileAmount++;
                                 break;
                             default:
-                                Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[i - 1][j - 1]);
+                                Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[x - 1][y - 1]);
                                 return false;
                         }
                     }
