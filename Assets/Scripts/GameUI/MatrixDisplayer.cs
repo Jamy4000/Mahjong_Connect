@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class MatrixDisplayer : MonoBehaviour
@@ -39,7 +40,8 @@ public class MatrixDisplayer : MonoBehaviour
                 // If empty tile, we don't display anything
                 if (_gameManager.TilesMatrix[i][j].IsEmpty) 
                 {
-                    Instantiate(_emptyTilePrefab, horizontalLayout);
+                    var newTile = Instantiate(_emptyTilePrefab, horizontalLayout);
+                    _gameManager.TilesMatrix[i][j].GameObjectRepresentation = newTile;
                 }
                 else 
                 {
@@ -58,9 +60,9 @@ public class MatrixDisplayer : MonoBehaviour
         ReplaceOneTile(info.SecondTile.Coordinates);
 
 
-        void ReplaceOneTile(Vector2 coordinates)
+        void ReplaceOneTile(int2 coordinates)
         {
-            var tileObject = _gameManager.TilesMatrix[(int)coordinates.x][(int)coordinates.y].GameObjectRepresentation;
+            var tileObject = _gameManager.TilesMatrix[coordinates.x][coordinates.y].GameObjectRepresentation;
 
             // Destroy all components and gameObject that we don't need anymore
             Destroy(tileObject.transform.GetChild(0).gameObject);
@@ -72,7 +74,10 @@ public class MatrixDisplayer : MonoBehaviour
             tileObject.GetComponent<Image>().color = new Color(0, 0, 0, 0);
 
             // Set the tile in the matrix as a new empty tile
-            _gameManager.TilesMatrix[(int)coordinates.x][(int)coordinates.y] = new Tile();
+            _gameManager.TilesMatrix[coordinates.x][coordinates.y] = new Tile(coordinates)
+            {
+                GameObjectRepresentation = tileObject
+            };
         }
     }
 }

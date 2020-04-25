@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public static Level CurrentLevel;
 
     public Tile[][] TilesMatrix;
-    public Dictionary<string, List<Vector2>> SameTilesCoordinates = new Dictionary<string, List<Vector2>>();
+    public Dictionary<string, List<Tile>> SameTilesDictionary = new Dictionary<string, List<Tile>>();
     public Tile CurrentlyClickedTile;
 
     private void Awake()
@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour
         CurrentlyClickedTile = null;
         try
         {
-            SameTilesCoordinates[info.FirstTile.ID].Remove(info.FirstTile.Coordinates);
-            SameTilesCoordinates[info.FirstTile.ID].Remove(info.SecondTile.Coordinates);
+            SameTilesDictionary[info.FirstTile.ID].Remove(info.FirstTile);
+            SameTilesDictionary[info.FirstTile.ID].Remove(info.SecondTile);
         }
         catch (System.Exception e)
         {
@@ -65,9 +65,9 @@ public class GameManager : MonoBehaviour
 
     internal void AddNewTileToDicitonary(Tile newTile)
     {
-        if (SameTilesCoordinates.ContainsKey(newTile.ID))
-            SameTilesCoordinates[newTile.ID].Add(newTile.Coordinates);
+        if (SameTilesDictionary.ContainsKey(newTile.ID))
+            SameTilesDictionary[newTile.ID].Add(newTile);
         else
-            SameTilesCoordinates.Add(newTile.ID, new List<Vector2> { newTile.Coordinates });
+            SameTilesDictionary.Add(newTile.ID, new List<Tile> { newTile });
     }
 }

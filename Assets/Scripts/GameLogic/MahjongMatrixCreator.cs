@@ -21,6 +21,8 @@ public class MahjongMatrixCreator : MonoBehaviour
                 _matrixDisplayer.DisplayMatrix();
             else
                 _matrixDisplayer.DisplayError();
+
+            PathFinder.CalculateAllAvailablePaths();
         }
         else
         {
@@ -41,7 +43,7 @@ public class MahjongMatrixCreator : MonoBehaviour
             // we go through all characters in the current line, + 2 (first and last columns are empty)
             for (int j = 0; j < _gameManager.TilesMatrix[i].Length; j++)
             {
-                _gameManager.TilesMatrix[i][j] = layout[i][j] ? Tile.CreateNewTile(ref usedIcons, tilesIcons, new Vector2(i, j)) : new Tile();
+                _gameManager.TilesMatrix[i][j] = layout[i][j] ? Tile.CreateNewTile(ref usedIcons, tilesIcons, new Unity.Mathematics.int2(i, j)) : new Tile(new Unity.Mathematics.int2(i, j));
             }
         }
 

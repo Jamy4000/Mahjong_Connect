@@ -36,10 +36,11 @@ public class TileClickHandler : MonoBehaviour
 
     private void CheckClickedTiles() 
     {
-        if (PathFinder.PathValidExist(ThisTile, _gameManager.CurrentlyClickedTile)) 
+        var path = PathFinder.ValidPathExist(ThisTile, _gameManager.CurrentlyClickedTile);
+        if (path != null) 
         {
             new OnUserValideAnswer(ThisTile, _gameManager.CurrentlyClickedTile);
-            PathFinder.UpdateAvailablePaths();
+            PathFinder.CalculateAllAvailablePaths();
         }
         else
         {

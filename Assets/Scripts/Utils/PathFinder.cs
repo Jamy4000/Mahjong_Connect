@@ -1,92 +1,108 @@
 ﻿using System.Collections.Generic;
+using System;
+using System.Linq;
 
 public static class PathFinder
 {
-    private static List<Path> _availablePaths = new List<Path>();
+    private static List<Path<Tile>> _availablePaths = new List<Path<Tile>>();
 
-    public static bool PathValidExist(Tile thisTile, Tile currentlyClickedTile)
+    public static Path<Tile> ValidPathExist(Tile thisTile, Tile currentlyClickedTile)
     {
-        return true;
+        int index = _availablePaths.FindIndex(p => IsPath(p.Last(), p.LastStep) || IsPath(p.LastStep, p.Last()));
+        return index >= 0 ? _availablePaths[index] : null;
 
-        foreach (var path in _availablePaths)
+        bool IsPath(Tile start, Tile end) 
         {
-            if (path.From == currentlyClickedTile && path.To.Contains(thisTile))
-                return true;
+            return start == currentlyClickedTile && end == thisTile;
         }
-
-        return false;
     }
 
-    public static void UpdateAvailablePaths()
+    /// <summary>
+    /// Using A* search algorithmn, and Manhattan heutistic for distance estimation
+    /// </summary>
+    public static void CalculateAllAvailablePaths()
     {
-        return;
+        var gameManager = GameManager.Instance;
+        var tileMatrix = gameManager.TilesMatrix;
 
-        var tileMatrix = GameManager.Instance.TilesMatrix;
+        List<SimplifiedPath> createdPaths = new List<SimplifiedPath>(); 
 
-        for (int i = 1; i < tileMatrix.Length - 1; i++)
+        // for all tiles in the dictionary
+        foreach (var lists in gameManager.SameTilesDictionary.Values)
         {
-            for (int j = 1; j < tileMatrix[i].Length - 1; j++)
+            // check all possible start
+            for (int i = 0; i < lists.Count; i++)
             {
-                List<Tile> neighbors = new List<Tile>();
-
-                if (tileMatrix[i][j] != null)
+                // check all possible destinations
+                for (int j = 0; j < lists.Count; j++)
                 {
-                    CheckNeighbors(i - 1, j, i, j, 0, ref neighbors);
-                    if (neighbors.Count > 0)
-                        _availablePaths.Add(new Path(tileMatrix[i][j], neighbors));
+                    // Check if we're not checking the same tile and if the path wasn't already created, but the other way around
+                    int index = createdPaths.FindIndex(p => p.From == lists[j] && p.To == lists[i]);
+                    if (i == j || index >= 0)
+                        continue;
 
-                    neighbors.Clear();
-                    CheckNeighbors(i, j - 1, i, j, 0, ref neighbors);
-                    if (neighbors.Count > 0)
-                        _availablePaths.Add(new Path(tileMatrix[i][j], neighbors));
-
-                    neighbors.Clear();
-                    CheckNeighbors(i + 1, j, i, j, 0, ref neighbors);
-                    if (neighbors.Count > 0)
-                        _availablePaths.Add(new Path(tileMatrix[i][j], neighbors));
-
-                    neighbors.Clear();
-                    CheckNeighbors(i, j + 1, i, j, 0, ref neighbors);
-                    if (neighbors.Count > 0)
-                        _availablePaths.Add(new Path(tileMatrix[i][j], neighbors));
+                    Path<Tile> path = FindAStarPath(lists[i], lists[j]);
+                    
+                    if (path != null)
+                    {
+                        createdPaths.Add(new SimplifiedPath(lists[i], lists[j]));
+                        _availablePaths.Add(path);
+                    }
                 }
             }
         }
     }
 
-    private static void CheckNeighbors(int i, int j, int originalI, int originalJ, int cornerSinceBeginning, ref List<Tile> toReturn)
+    public static Path<Tile> FindAStarPath(Tile start, Tile destination)
     {
-        var tileMatrix = GameManager.Instance.TilesMatrix;
+        var closed = new HashSet<Tile>();
+        var queue = new PriorityQueue<double, Path<Tile>>();
 
-        // if the current neighbor isn't an empty tile
-        if (!tileMatrix[i][j].IsEmpty) 
+        queue.Enqueue(0, new Path<Tile>(start));
+
+        Tile previousTile = start;
+
+        while (!queue.IsEmpty)
         {
-            if (tileMatrix[i][j].ID == tileMatrix[originalI][originalJ].ID && i != originalI && j != originalJ) 
+            var path = queue.Dequeue();
+
+            if (closed.Contains(path.LastStep))
+                continue;
+
+            if (path.LastStep.Equals(destination))
+                return path;
+
+            closed.Add(path.LastStep);
+
+            foreach (Tile n in path.LastStep.Neighbours)
             {
-                toReturn.Add(tileMatrix[i][j]);
-            }
-        }
-        else 
-        {
-            for (int x = -1; x < 2; x += 2)
-            {
-                for (int y = -1; y < 2; y += 2)
+                // We only go forward if the next tile is empty or is the destination
+                if (n.IsEmpty || n == destination)
                 {
-                    CheckNeighbors(i + x, j + y, originalI, originalJ, cornerSinceBeginning + 1, ref toReturn);
+                    int cost = IsTurning(path.LastStep, n, previousTile);
+                    if (path.SubCost + cost < 30)
+                    {
+                        var newPath = path.AddStep(n, cost);
+                        queue.Enqueue(newPath.TotalCost + ManhattanHeuristic(n, destination), newPath);
+                    }
                 }
             }
+
+            previousTile = path.LastStep;
         }
+
+        return null;
     }
-}
 
-public struct Path 
-{
-    public Tile From;
-    public List<Tile> To;
-
-    public Path(Tile from, List<Tile> to) 
+    private static int IsTurning(Tile currentNode, Tile nextNode, Tile previousNode)
     {
-        From = from;
-        To = to;
+        bool isGoingHorizontal = (currentNode.Coordinates.x == nextNode.Coordinates.x) && (currentNode.Coordinates.x == previousNode.Coordinates.x);
+        bool isGoingVertical = (currentNode.Coordinates.y == nextNode.Coordinates.y) && (currentNode.Coordinates.y == previousNode.Coordinates.y);
+        return isGoingHorizontal || isGoingVertical ? 0 : 10;
+    }
+
+    private static double ManhattanHeuristic(Tile newNode, Tile end)
+    {
+        return Math.Abs(newNode.Coordinates.x - end.Coordinates.x) + Math.Abs(newNode.Coordinates.y - end.Coordinates.y);
     }
 }
