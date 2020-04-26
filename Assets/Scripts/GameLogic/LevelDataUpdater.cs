@@ -25,7 +25,7 @@ public class LevelDataUpdater : MonoBehaviour
             if (_gameManager.CurrentScore > currentLevel.Score)
             {
                 currentLevel.Score = _gameManager.CurrentScore;
-                PlayerPrefs.SetInt(UserDataDisplayer.USER_LEVEL_SCORE + currentLevel.Index, currentLevel.Score);
+                PlayerPrefs.SetInt(UserDataFetcher.USER_LEVEL_SCORE + currentLevel.Index, currentLevel.Score);
             }
         }
     }
