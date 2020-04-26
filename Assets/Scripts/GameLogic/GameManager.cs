@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -112,6 +113,7 @@ public class GameManager : MonoBehaviour
 
     private void ResetCurrentClickedTile(OnUserError info)
     {
+        CurrentlyClickedTile.GameObjectRepresentation.GetComponent<Button>().OnSelect(null);
         CurrentlyClickedTile = null;
         CurrentScore = Mathf.Clamp(CurrentScore - 10, 0, CurrentScore);
     }

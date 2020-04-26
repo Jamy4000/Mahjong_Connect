@@ -14,7 +14,7 @@ public class MatrixDisplayer : MonoBehaviour
         OnUserValideAnswer.Listeners += ReplaceTiles;
     }
 
-    internal void DisplayError()
+    public void DisplayError()
     {
         Debug.LogError("TODO");
     }
@@ -60,15 +60,6 @@ public class MatrixDisplayer : MonoBehaviour
         void ReplaceOneTile(int2 coordinates)
         {
             var tileObject = _gameManager.TilesMatrix[coordinates.x][coordinates.y].GameObjectRepresentation;
-
-            // Destroy all components and gameObject that we don't need anymore
-            Destroy(tileObject.transform.GetChild(0).gameObject);
-            Destroy(tileObject.GetComponent<Button>());
-            Destroy(tileObject.GetComponent<TileClickHandler>());
-            Destroy(tileObject.GetComponent<Animator>());
-
-            // set empty tile to transparent
-            tileObject.GetComponent<Image>().color = new Color(0, 0, 0, 0);
 
             // Set the tile in the matrix as a new empty tile
             _gameManager.TilesMatrix[coordinates.x][coordinates.y] = new Tile(coordinates)

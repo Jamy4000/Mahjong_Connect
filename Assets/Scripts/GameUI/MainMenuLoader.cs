@@ -8,8 +8,6 @@ public class MainMenuLoader : MonoBehaviour
 
     public void MenuButtonCallback()
     {
-        Debug.Log("TODO ANIMATION");
-        _validationPanel.gameObject.SetActive(true);
         _validationPanel.SetTrigger("ShowPanel");
     }
 
@@ -20,8 +18,6 @@ public class MainMenuLoader : MonoBehaviour
 
     public void OnUserCancel()
     {
-        Debug.Log("TODO ANIMATION");
-        _validationPanel.gameObject.SetActive(false);
-        //_validationPanel.SetTrigger("HidePanel");
+        _validationPanel.SetTrigger("HidePanel");
     }
 }
