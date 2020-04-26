@@ -14,6 +14,7 @@ public class HintDisplayer : MonoBehaviour
     private Vector3 _previousWayPoint;
     private Vector3 _currentWayPoint;
     private LineRenderer _currentLr;
+    private Transform _lineRendererPS;
 
     private Dictionary<Tuple<Tile, Tile>, GameObject> _instantiatedLr = new Dictionary<Tuple<Tile, Tile>, GameObject>();
 
@@ -27,10 +28,13 @@ public class HintDisplayer : MonoBehaviour
     {
         if (_currentLr != null)
         {
+            var newPos = new Vector3(
+                Mathf.Lerp(_previousWayPoint.x, _currentWayPoint.x, _lineAnimTime),
+                Mathf.Lerp(_previousWayPoint.y, _currentWayPoint.y, _lineAnimTime), _currentWayPoint.z);
+
             // animate the position of the line
-            _currentLr.SetPosition(_currentLr.positionCount-1, new Vector3(
-                Mathf.Lerp(_previousWayPoint.x, _currentWayPoint.x, _lineAnimTime), 
-                Mathf.Lerp(_previousWayPoint.y, _currentWayPoint.y, _lineAnimTime), _currentWayPoint.z));
+            _currentLr.SetPosition(_currentLr.positionCount-1, newPos);
+            _lineRendererPS.position = newPos;
 
             // .. and increase the t interpolater
             _lineAnimTime += _lineAnimSpeed * Time.deltaTime;
@@ -51,6 +55,7 @@ public class HintDisplayer : MonoBehaviour
                     _currentWayPoint = Vector3.zero;
                     _previousWayPoint = Vector3.zero;
                     _currentLr = null;
+                    Destroy(_lineRendererPS.gameObject);
                     _hintButton.interactable = APathExist(out Path<Tile> _);
                 }
             }
@@ -141,6 +146,7 @@ public class HintDisplayer : MonoBehaviour
         _instantiatedLr.Add(new Tuple<Tile, Tile>(path.LastStep, path.Last()), newLrObject);
 
         _currentLr = newLrObject.GetComponent<LineRenderer>();
+        _lineRendererPS = _currentLr.GetComponentInChildren<ParticleSystem>().transform;
         _currentLr.positionCount = 2;
         _currentLr.SetPositions(new Vector3[2] { firstWayPoint, firstWayPoint } );
     }

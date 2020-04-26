@@ -894,7 +894,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lineRenderer: {fileID: 8996378353978108807, guid: c6888336b472e814d896e4004c39f004,
     type: 3}
-  _lineAnimSpeed: 15
+  _lineAnimSpeed: 10
 --- !u!1 &278462262
 GameObject:
   m_ObjectHideFlags: 0
