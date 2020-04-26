@@ -87,6 +87,7 @@ public class TileClickHandler : MonoBehaviour
         Destroy(transform.GetChild(0).gameObject);
         Destroy(GetComponent<Button>());
         Destroy(GetComponent<Animator>());
+        Destroy(_ps);
 
         // set empty tile to transparent
         GetComponent<Image>().color = new Color(0, 0, 0, 0);
