@@ -13,7 +13,7 @@ public class TileClickHandler : MonoBehaviour
 
     private GameManager _gameManager;
     private Animator _animator;
-    private ParticleSystem _ps;
+    [SerializeField] private ParticleSystem _ps;
 
     private bool _isSelected;
 
@@ -22,7 +22,6 @@ public class TileClickHandler : MonoBehaviour
         OnUserError.Listeners += UserMadeAnError;
         OnUserValideAnswer.Listeners += UserMadeAValidAnswer;
         _animator = GetComponent<Animator>();
-        _ps = GetComponent<ParticleSystem>();
     }
 
     private void Start()
