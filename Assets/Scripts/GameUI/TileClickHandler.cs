@@ -1,8 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handle the click callback on the Tiles
+/// </summary>
 public class TileClickHandler : MonoBehaviour
 {
+    /// <summary>
+    /// The tile linked to this script
+    /// </summary>
     public Tile ThisTile;
 
     private GameManager _gameManager;
@@ -30,23 +36,31 @@ public class TileClickHandler : MonoBehaviour
         OnUserValideAnswer.Listeners -= UserMadeAValidAnswer;
     }
 
+    /// <summary>
+    /// Callback for when the tile is clicked, called from the button component
+    /// </summary>
     public void OnClick()
     {
+        // if no tile was selected until now
         if (_gameManager.CurrentlyClickedTile == null)
         {
+            // this become the selected tile
             _animator.SetTrigger("Select");
             _gameManager.CurrentlyClickedTile = ThisTile;
             _isSelected = true;
         }
+        // if the player want to deselect this tile
         else if (_gameManager.CurrentlyClickedTile == ThisTile)
         {
             CancelClick(false);
         }
+        // if the player try to match two tiles together with the same id
         else if (string.Equals(_gameManager.CurrentlyClickedTile.ID, ThisTile.ID))
         {
             _isSelected = true;
             CheckClickedTiles();
         }
+        // if the user matched two tiles that aren't the same
         else
         {
             new OnUserError();
@@ -54,6 +68,9 @@ public class TileClickHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Check if a path exist between the two clicked tiles 
+    /// </summary>
     private void CheckClickedTiles() 
     {
         if (PathFinder.FetchPath(ThisTile, _gameManager.CurrentlyClickedTile, true) != null) 
@@ -62,12 +79,19 @@ public class TileClickHandler : MonoBehaviour
             new OnUserError();
     }
 
+    /// <summary>
+    /// Callback for when the user makes a mistake
+    /// </summary>
     private void UserMadeAnError(OnUserError _) 
     {
         if (_isSelected)
             CancelClick(true);
     }
 
+    /// <summary>
+    /// Callback for when the user was right by matching two tiles
+    /// </summary>
+    /// <param name="_"></param>
     private void UserMadeAValidAnswer(OnUserValideAnswer _)
     {
         if (_isSelected)
@@ -95,6 +119,10 @@ public class TileClickHandler : MonoBehaviour
         Destroy(this);
     }
 
+    /// <summary>
+    /// Cancel a click on the current tile
+    /// </summary>
+    /// <param name="isError">Is the cancel happening because the user made an error ?</param>
     private void CancelClick(bool isError)
     {
         _gameManager.CurrentlyClickedTile = null;

@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Display the panel at the end of the game to the user
+/// </summary>
+[RequireComponent(typeof(Animator))]
 public class EndOfGamePanelHandler : MonoBehaviour
 {
-    [SerializeField] private Animator _endOfGamePanel;
+    private Animator _animator;
     [SerializeField] private TMPro.TextMeshProUGUI _resultText;
     [SerializeField] private TMPro.TextMeshProUGUI _scoreText;
 
     private void Awake()
     {
+        _animator = GetComponent<Animator>();
         OnGameEnded.Listeners += ShowPanel;
     }
 
@@ -20,7 +25,6 @@ public class EndOfGamePanelHandler : MonoBehaviour
     {
         _resultText.text = info.HasWon ? "Well done, you did it !" : "Oops, you losed ...";
         _scoreText.text = "Your final score is " + GameManager.Instance.CurrentScore;
-        _endOfGamePanel.gameObject.SetActive(true);
-        _endOfGamePanel.SetTrigger("ShowPanel");
+        _animator.SetTrigger("ShowPanel");
     }
 }

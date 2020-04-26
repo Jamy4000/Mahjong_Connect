@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Instantiate dynamically a grid of buttons based on the amount of levels we've got in the game
+/// </summary>
 public class LevelButtonInstantiater : MonoBehaviour
 {
     [SerializeField] private GameObject _buttonsLine;

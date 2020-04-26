@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Simply holds all levels that are available in the game
+/// </summary>
 public class LevelsHolder : MonoBehaviour
 {
     [SerializeField] private Level[] _levels = new Level[5];

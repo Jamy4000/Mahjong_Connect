@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Display the basic data for the current open level
+/// </summary>
 public class LevelDataDisplayer : MonoBehaviour
 {
     [SerializeField] private TMPro.TextMeshProUGUI _levelName;

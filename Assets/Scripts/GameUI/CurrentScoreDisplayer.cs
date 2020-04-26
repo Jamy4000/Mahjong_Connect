@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Display the current score on every updates on the screen
+/// </summary>
 public class CurrentScoreDisplayer : MonoBehaviour
 {
     [SerializeField] private TMPro.TextMeshProUGUI _scoreValueField;

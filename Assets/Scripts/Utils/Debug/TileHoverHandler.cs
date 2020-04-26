@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Provide some generals events when a tile is hovered.
+/// To enable debug mode, simply turn on the "DebugHelper" panel in the MainGame Canvas
+/// </summary>
 public class TileHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private Tile _thisTile;

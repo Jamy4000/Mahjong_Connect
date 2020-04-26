@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Display some debug values for the currently hovered tile, as well as all available paths.
+/// To enable debug mode, simply turn on the "DebugHelper" panel in the MainGame Canvas
+/// </summary>
 public class DebugValueDisplayer : MonoBehaviour
 {
     [SerializeField] private GameObject _lineRenderer;

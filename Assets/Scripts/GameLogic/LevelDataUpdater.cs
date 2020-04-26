@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Update the data for the current level when the game has ended
+/// </summary>
 public class LevelDataUpdater : MonoBehaviour
 {
     private GameManager _gameManager;

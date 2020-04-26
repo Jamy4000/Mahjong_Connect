@@ -1400,11 +1400,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 85f0e1c61029c424ebcef27e8103f3e3, type: 2}
   - {fileID: 11400000, guid: 0ac409e20315f1146ac5cdf426b7c9dd, type: 2}
   - {fileID: 11400000, guid: 3484379d2fe701a48b541136ef52d748, type: 2}
-  - {fileID: 11400000, guid: 0200d7c66d5e33f489d42ae46db4d3bf, type: 2}
-  - {fileID: 11400000, guid: dbac8771508fe544f93d34247f5f8cbc, type: 2}
-  - {fileID: 11400000, guid: 96d5fe60b9944384eb2c5ca9350d1fd7, type: 2}
-  - {fileID: 11400000, guid: 7489a011942182b4a923f15f25b543bb, type: 2}
-  - {fileID: 11400000, guid: d994f19578d2a4d48a62d50e531ede8d, type: 2}
 --- !u!4 &2094303869
 Transform:
   m_ObjectHideFlags: 0
@@ -1431,4 +1426,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e820eb6f8aeae0447ab5747b402f7138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clearPlayersPref: 0

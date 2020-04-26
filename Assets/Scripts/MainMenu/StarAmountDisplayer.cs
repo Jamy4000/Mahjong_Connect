@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Display how much stars the user got until now at the bottom of the screen
+/// </summary>
 public class StarAmountDisplayer : MonoBehaviour
 {
     [SerializeField] private TMPro.TextMeshProUGUI _userScore;

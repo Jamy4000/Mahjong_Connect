@@ -2,9 +2,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Display th ematrix on the screen once it has been created
+/// </summary>
 public class MatrixDisplayer : MonoBehaviour
 {
     private GameManager _gameManager;
+
     [SerializeField] private Animator _errorPanelAnimator;
     [SerializeField] private GameObject _verticalLayoutPrefab;
     [SerializeField] private GameObject _tilePrefab;
@@ -15,16 +19,14 @@ public class MatrixDisplayer : MonoBehaviour
         OnUserValideAnswer.Listeners += ReplaceTiles;
     }
 
-    public void DisplayError()
-    {
-        _errorPanelAnimator.SetTrigger("ShowPanel");
-    }
-
     private void OnDestroy()
     {
         OnUserValideAnswer.Listeners -= ReplaceTiles;
     }
 
+    /// <summary>
+    /// Method called from the MahjongMatrixCreator, instantiate all tiles
+    /// </summary>
     public void DisplayMatrix()
     {
         _gameManager = GameManager.Instance;
@@ -35,7 +37,7 @@ public class MatrixDisplayer : MonoBehaviour
 
             for (int y = 0; y < _gameManager.TilesMatrix[0].Length; y++)
             {
-                // If empty tile, we don't display anything
+                // If empty tile, we display an empty tile 
                 if (_gameManager.TilesMatrix[x][y].IsEmpty) 
                 {
                     var newTile = Instantiate(_emptyTilePrefab, verticalLayout);
@@ -52,6 +54,18 @@ public class MatrixDisplayer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Display an error panel if necessary, like if the layout couldn't be parse properly
+    /// </summary>
+    public void DisplayError()
+    {
+        _errorPanelAnimator.SetTrigger("ShowPanel");
+    }
+
+    /// <summary>
+    /// Replace the two tiles that were successfully joined by two empty tiles
+    /// </summary>
+    /// <param name="info"></param>
     private void ReplaceTiles(OnUserValideAnswer info)
     {
         ReplaceOneTile(info.FirstTile.Coordinates);

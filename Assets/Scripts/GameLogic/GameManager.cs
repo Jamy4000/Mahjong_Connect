@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Store the board and some important piece of info for our game, and handle soe base logic as well
+/// </summary>
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// Singleton
+    /// </summary>
     public static GameManager Instance 
     {
         get;
@@ -16,18 +21,29 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static Level CurrentLevel;
 
+    /// <summary>
+    /// The board of our game
+    /// </summary>
     public Tile[][] TilesMatrix;
+
+    /// <summary>
+    /// Dictionary containing the ID of a tile as key, and a list of tiles that have this ID on the board.
+    /// </summary>
     public Dictionary<string, List<Tile>> SameTilesDictionary = new Dictionary<string, List<Tile>>();
+
+    /// <summary>
+    /// The tile that is currently selected.
+    /// </summary>
     public Tile CurrentlyClickedTile;
 
+    /// <summary>
+    /// The current score for this level
+    /// </summary>
     public int CurrentScore
     {
         get;
         private set;
     }
-
-    public int TileAmount;
-    private int _correctAnswerAmount = 0;
 
     private void Awake()
     {
@@ -40,7 +56,7 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         OnUserValideAnswer.Listeners += UserGaveValidAnswerCallback;
-        OnUserError.Listeners += ResetCurrentClickedTile;
+        OnUserError.Listeners += SetCurrentScore;
     }
 
     private void OnDestroy()
@@ -48,12 +64,15 @@ public class GameManager : MonoBehaviour
         if (Instance == this)
         {
             Instance = null;
-
             OnUserValideAnswer.Listeners -= UserGaveValidAnswerCallback;
-            OnUserError.Listeners -= ResetCurrentClickedTile;
+            OnUserError.Listeners -= SetCurrentScore;
         }
     }
 
+    /// <summary>
+    /// callback when two tiles have been correctly matched
+    /// </summary>
+    /// <param name="info"></param>
     private void UserGaveValidAnswerCallback(OnUserValideAnswer info)
     {
         CurrentlyClickedTile = null;
@@ -66,11 +85,13 @@ public class GameManager : MonoBehaviour
 
         // Update Current Score
         CurrentScore += 15;
-        _correctAnswerAmount++;
 
         CheckRemainingPairs();
     }
 
+    /// <summary>
+    /// Check if there's still some pairs to do. if not, user has won / lost.
+    /// </summary>
     private void CheckRemainingPairs()
     {
         if (SameTilesDictionary.Count == 0)
@@ -79,6 +100,9 @@ public class GameManager : MonoBehaviour
             CheckIfGameIsLost();
     }
 
+    /// <summary>
+    /// Check if there's still some avilable paths on the board
+    /// </summary>
     private void CheckIfGameIsLost()
     {
         bool hasLost = true;
@@ -111,14 +135,19 @@ public class GameManager : MonoBehaviour
             new OnGameEnded(false);
     }
 
-    private void ResetCurrentClickedTile(OnUserError info)
+    /// <summary>
+    /// Set the current score if the user make a mistake
+    /// </summary>
+    private void SetCurrentScore(OnUserError _)
     {
-        CurrentlyClickedTile.GameObjectRepresentation.GetComponent<Button>().OnSelect(null);
-        CurrentlyClickedTile = null;
         CurrentScore = Mathf.Clamp(CurrentScore - 10, 0, CurrentScore);
     }
 
-    internal void AddNewTileToDictionary(Tile newTile)
+    /// <summary>
+    /// Add a new tile to the SameTilesDictionary when its created
+    /// </summary>
+    /// <param name="newTile">The tile that was created</param>
+    public void AddNewTileToDictionary(Tile newTile)
     {
         if (SameTilesDictionary.ContainsKey(newTile.ID))
             SameTilesDictionary[newTile.ID].Add(newTile);

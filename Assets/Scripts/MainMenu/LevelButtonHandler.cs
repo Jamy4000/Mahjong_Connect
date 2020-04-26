@@ -2,6 +2,9 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handle the callbacks for when the user select a level
+/// </summary>
 public class LevelButtonHandler : MonoBehaviour
 {
     [HideInInspector] public Level _thisLevel;

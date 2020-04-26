@@ -1,28 +1,35 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Fetch the data from the user, stored in the Players Prefs
+/// </summary>
 [RequireComponent(typeof(LevelsHolder))]
 public class UserDataFetcher : MonoBehaviour
 {
-    private LevelsHolder _levelLoader;
-    [SerializeField] private bool _clearPlayersPref;
+    /// <summary>
+    /// The script holding the Levels as Scriptable Objects
+    /// </summary>
+    private LevelsHolder _levelsHolder;
+
+    /// <summary>
+    /// The key of the score for each level in the players pref. Add the Level index alongside.
+    /// </summary>
     public const string USER_LEVEL_SCORE = "UserLevelScore";
 
     private void Awake()
     {
-        if (_clearPlayersPref)
-            PlayerPrefs.DeleteAll();
-        _levelLoader = GetComponent<LevelsHolder>();
+        _levelsHolder = GetComponent<LevelsHolder>();
         GetUserData();
     }
 
     /// <summary>
-    /// 
+    /// Fetch the user data from the players prefs and save them in th Levels SO
     /// </summary>
     private void GetUserData() 
     {
-        for (int i = 0; i < _levelLoader.LevelAmount; i++)
+        for (int i = 0; i < _levelsHolder.LevelAmount; i++)
         {
-            var level = _levelLoader.Levels[i];
+            var level = _levelsHolder.Levels[i];
 
             if (PlayerPrefs.HasKey(USER_LEVEL_SCORE + i)) 
             {
