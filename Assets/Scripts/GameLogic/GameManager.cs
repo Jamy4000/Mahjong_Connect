@@ -125,4 +125,9 @@ public class GameManager : MonoBehaviour
         else
             SameTilesDictionary.Add(newTile.ID, new List<Tile> { newTile });
     }
+
+    public void QuitApp()
+    {
+        Application.Quit();
+    }
 }

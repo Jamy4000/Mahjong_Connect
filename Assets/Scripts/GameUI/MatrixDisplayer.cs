@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class MatrixDisplayer : MonoBehaviour
 {
     private GameManager _gameManager;
+    [SerializeField] private Animator _errorPanelAnimator;
     [SerializeField] private GameObject _verticalLayoutPrefab;
     [SerializeField] private GameObject _tilePrefab;
     [SerializeField] private GameObject _emptyTilePrefab;
@@ -16,7 +17,7 @@ public class MatrixDisplayer : MonoBehaviour
 
     public void DisplayError()
     {
-        Debug.LogError("TODO");
+        _errorPanelAnimator.SetTrigger("ShowPanel");
     }
 
     private void OnDestroy()

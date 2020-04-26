@@ -53,7 +53,7 @@ public static class LevelLayoutParser
                                 GameManager.Instance.TileAmount++;
                                 break;
                             default:
-                                Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[x - 1][y - 1]);
+                                Debug.LogErrorFormat("The character '{0}' isn't recognized when handling layout file. Please change it to 0 or X.", lines[y - 1][x - 1]);
                                 return false;
                         }
                     }

@@ -4,11 +4,13 @@
 public class UserDataFetcher : MonoBehaviour
 {
     private LevelsHolder _levelLoader;
-
+    [SerializeField] private bool _clearPlayersPref;
     public const string USER_LEVEL_SCORE = "UserLevelScore";
 
     private void Awake()
     {
+        if (_clearPlayersPref)
+            PlayerPrefs.DeleteAll();
         _levelLoader = GetComponent<LevelsHolder>();
         GetUserData();
     }
